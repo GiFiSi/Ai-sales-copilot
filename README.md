@@ -56,26 +56,37 @@ Toda a solução é exposta via **FastAPI** como uma API RESTful e consumida por
   <img src="docs/architecture_diagram.png" alt="Diagrama de Arquitetura" width="80%">
 </p>
 
-```
-┌──────────────┐   (1)   ┌───────────────┐   (2)   ┌───────────────┐
-│  Streamlit   │────────▶│    FastAPI    │────────▶│   Presidio    │
-│  (Frontend)  │         │  (API REST)   │         │ (PII Masking) │
-└──────────────┘         └───────┬───────┘         └───────────────┘
-                                 │
-                                 │ (3)
-                                 ▼
-┌──────────────┐   (4)   ┌───────────────┐   (5)   ┌───────────────┐
-│  LangChain   │◀───────▶│   Pinecone    │────────▶│   LLM 4-bit   │
-│(RAG Pipeline)│         │(Vector Store) │         │ (QLoRA Tuned) │
-└──────────────┘         └───────────────┘         └───────────────┘
+```text
+                              ┌───────────────┐
+                              │   Streamlit   │
+                              │  (Frontend)   │
+                              └───────┬───────┘
+                                      │ (1)
+                                      ▼
+                              ┌───────────────┐
+                              │    FastAPI    │
+                              │  (API REST)   │
+                              └───────┬───────┘
+                                      │ (2)
+                                      ▼
+                              ┌───────────────┐
+                     ┌───────▶│   RAG Chain   │◀────────┐
+                     │        │(Orquestrador) │         │
+                     │        └───────┬───────┘         │
+                 (3) │                │ (4)             │ (5)
+                     ▼                ▼                 ▼
+             ┌───────────────┐┌───────────────┐┌───────────────┐
+             │  PII Masking  ││   Pinecone    ││   LLM 4-bit   │
+             │(Presidio/Regex││(Vector Store) ││(Local / QLoRA)│
+             └───────────────┘└───────────────┘└───────────────┘
 ```
 
-**Fluxo:**
-1. Usuário envia a pergunta pelo **Streamlit**
-2. **FastAPI** recebe e envia ao **Presidio** para mascarar PII (dados sensíveis)
-3. A pergunta limpa é enviada ao **LangChain** para iniciar o RAG
-4. O LangChain busca o contexto relevante no **Pinecone**
-5. O contexto e a pergunta são enviados ao **LLM quantizado** para gerar a resposta
+**Fluxo exato de Execução (RAG Chain):**
+1. O usuário digita a pergunta no **Streamlit**, que faz um POST para a API.
+2. O **FastAPI** recebe a requisição e invoca o orquestrador central (`RAGChain`).
+3. O orquestrador aciona o **PIIMasker**, que varre a pergunta usando Presidio/Regex para anonimizar entidades sensíveis (ex: CPF → `[CPF_MASCARADO]`).
+4. A pergunta segura é enviada ao retriever, que faz a busca vetorial no **Pinecone** para trazer os contextos documentais mais relevantes.
+5. O prompt final (Contexto + Pergunta Segura) é enviado ao **LLM 4-bit**. A resposta gerada passa pelo `PIIUnmasker` (para restaurar o dado original para o usuário) e é devolvida para a tela.
 
 ---
 
