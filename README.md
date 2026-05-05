@@ -240,7 +240,7 @@ curl -X POST http://localhost:8000/api/v1/chat \
 
 ## 🗃 Histórico de lançamentos
 
-* 0.1.0 - XX/XX/2025
+* 0.1.0 - 05/05/2026
     * Primeira versão: RAG pipeline + PII masking + modelo quantizado + interface Streamlit
 
 ---
@@ -262,7 +262,7 @@ curl -X POST http://localhost:8000/api/v1/chat \
 Este projeto está licenciado sob a [MIT License](LICENSE).
 
 ```
-MIT License — Copyright (c) 2025
+MIT License — Copyright (c) 2026
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

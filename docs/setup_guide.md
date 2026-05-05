@@ -21,8 +21,8 @@ Guia completo para configurar e executar o projeto do zero.
 ## 1. Clonar o Repositório
 
 ```bash
-git clone https://github.com/seu-usuario/ai-sales-copilot.git
-cd ai-sales-copilot
+git clone https://github.com/GiFiSi/Ai-sales-copilot.git
+cd Ai-sales-copilot
 ```
 
 ## 2. Criar Ambiente Virtual
