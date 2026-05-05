@@ -56,30 +56,6 @@ Toda a solução é exposta via **FastAPI** como uma API RESTful e consumida por
   <img src="docs/architecture_diagram.png" alt="Diagrama de Arquitetura" width="80%">
 </p>
 
-```text
-                              ┌───────────────┐
-                              │   Streamlit   │
-                              │  (Frontend)   │
-                              └───────┬───────┘
-                                      │ (1)
-                                      ▼
-                              ┌───────────────┐
-                              │    FastAPI    │
-                              │  (API REST)   │
-                              └───────┬───────┘
-                                      │ (2)
-                                      ▼
-                              ┌───────────────┐
-                     ┌───────▶│   RAG Chain   │◀────────┐
-                     │        │(Orquestrador) │         │
-                     │        └───────┬───────┘         │
-                 (3) │                │ (4)             │ (5)
-                     ▼                ▼                 ▼
-             ┌───────────────┐┌───────────────┐┌───────────────┐
-             │  PII Masking  ││   Pinecone    ││   LLM 4-bit   │
-             │(Presidio/Regex││(Vector Store) ││(Local / QLoRA)│
-             └───────────────┘└───────────────┘└───────────────┘
-```
 
 **Fluxo exato de Execução (RAG Chain):**
 1. O usuário digita a pergunta no **Streamlit**, que faz um POST para a API.
