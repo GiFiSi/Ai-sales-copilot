@@ -57,30 +57,25 @@ Toda a solução é exposta via **FastAPI** como uma API RESTful e consumida por
 </p>
 
 ```
-┌─────────────┐     ┌──────────────┐     ┌───────────────┐
-│  Streamlit   │────▶│   FastAPI     │────▶│  PII Masking  │
-│  (Frontend)  │◀────│   (Backend)   │     │  (Presidio)   │
-└─────────────┘     └──────┬───────┘     └───────┬───────┘
-                           │                     │
-                           ▼                     ▼
-                    ┌──────────────┐     ┌───────────────┐
-                    │  LangChain   │────▶│   Pinecone    │
-                    │  Orchestrator│     │  (VectorDB)   │
-                    └──────┬───────┘     └───────────────┘
-                           │
-                           ▼
-                    ┌──────────────┐
-                    │  LLM Local   │
-                    │  4-bit QLoRA │
-                    └──────────────┘
+┌──────────────┐   (1)   ┌───────────────┐   (2)   ┌───────────────┐
+│  Streamlit   │────────▶│    FastAPI    │────────▶│   Presidio    │
+│  (Frontend)  │         │  (API REST)   │         │ (PII Masking) │
+└──────────────┘         └───────┬───────┘         └───────────────┘
+                                 │
+                                 │ (3)
+                                 ▼
+┌──────────────┐   (4)   ┌───────────────┐   (5)   ┌───────────────┐
+│  LangChain   │◀───────▶│   Pinecone    │────────▶│   LLM 4-bit   │
+│(RAG Pipeline)│         │(Vector Store) │         │ (QLoRA Tuned) │
+└──────────────┘         └───────────────┘         └───────────────┘
 ```
 
 **Fluxo:**
-1. Usuário envia pergunta pelo **Streamlit**
-2. **FastAPI** recebe e encaminha ao **Presidio** para mascarar PII
-3. Pergunta limpa vai ao **LangChain**, que busca contexto relevante no **Pinecone**
-4. Contexto + pergunta são enviados ao **LLM quantizado** (4-bit) para geração
-5. Resposta retorna ao usuário com indicação das fontes utilizadas
+1. Usuário envia a pergunta pelo **Streamlit**
+2. **FastAPI** recebe e envia ao **Presidio** para mascarar PII (dados sensíveis)
+3. A pergunta limpa é enviada ao **LangChain** para iniciar o RAG
+4. O LangChain busca o contexto relevante no **Pinecone**
+5. O contexto e a pergunta são enviados ao **LLM quantizado** para gerar a resposta
 
 ---
 
