@@ -1,7 +1,7 @@
 # 🤖 AI Sales Copilot
 
 <p align="center">
-  <img src="assets/logo.png" alt="AI Sales Copilot" border="0" width="40%" height="40%">
+  <img src="assets/logo.png" alt="AI Sales Copilot" border="0" width="80%">
 </p>
 
 <br>
