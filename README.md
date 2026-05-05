@@ -21,7 +21,7 @@
 
 ## 👨‍💻 Autor
 
-- <a href="https://www.linkedin.com/in/seu-perfil">Seu Nome</a>
+- <a href="https://www.linkedin.com/in/guilherme-ferreira-santos-94619b23a/">Guilherme Ferreira Santos</a> — Engenheiro de Dados e Automação | Analytics | AI & DevOps
 
 ---
 
@@ -181,8 +181,8 @@ project-root/
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/seu-usuario/ai-sales-copilot.git
-cd ai-sales-copilot
+git clone https://github.com/GiFiSi/Ai-sales-copilot.git
+cd Ai-sales-copilot
 
 # 2. Crie e ative o ambiente virtual
 python -m venv .venv
